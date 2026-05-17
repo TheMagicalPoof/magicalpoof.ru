@@ -7,6 +7,10 @@
   const hazeWidth = 84;
   const hazeHeight = 30;
   const hazeHues = [54, 176, 204, 112, 326, 24];
+  const nyanUnlockBackflipCount = 10;
+  const nyanRainbowFrameCount = 12;
+  const nyanRainbowFrameDelay = 150;
+  const nyanWaves = Array.from({ length: 7 }, (_, index) => index + 1);
   const projects = [
     {
       title: "CAPS TABLE",
@@ -24,6 +28,35 @@
       image: "/projects/cute-plant-icon.png"
     }
   ];
+  const links = [
+    {
+      title: "TELEGRAM",
+      url: "https://t.me/magicalpoof",
+      image: "/media/telegram_icon.png"
+    },
+    {
+      title: "DISCORD",
+      url: "https://discord.gg/gDttwhEq4",
+      image: "/media/discord_icon.png"
+    },
+    {
+      title: "YOUTUBE",
+      url: "https://www.youtube.com/@magical_poof",
+      image: "/media/youtube_icon.png"
+    }
+  ];
+  const linkBanners = [
+    {
+      title: "VARD",
+      url: "https://vard.cc/",
+      image: "/media/btn_vard_on.webp"
+    },
+    {
+      title: "SIM.RED",
+      url: "https://sim.red/",
+      image: "/media/redsim.webp"
+    }
+  ];
 
   let stars = [];
   let nextStarId = 0;
@@ -31,7 +64,21 @@
   let spawnTimeout;
   let logoAnimationFrame;
   let logoHazeCanvas;
+  let shopHazeCanvas;
   let currentPage = "bio";
+  let licenseFlipped = false;
+  let licenseBackflipCount = 0;
+  let licenseNyanUnlocked = false;
+  let nyanRainbowOffset = 0;
+
+  $: nyanRainbowFrames = Array.from({ length: nyanRainbowFrameCount }, (_, offset) => {
+    const index = nyanRainbowOffset + offset;
+
+    return {
+      frame: index % 2 === 0 ? "frame-1" : "frame-2",
+      id: index
+    };
+  });
 
   function lerp(start, end, amount) {
     return start + amount * (end - start);
@@ -88,18 +135,13 @@
     return base.map((channel) => Math.round((channel + match) * 255));
   }
 
-  function drawLogoHaze(timestamp) {
-    if (!logoHazeCanvas) {
-      logoAnimationFrame = window.requestAnimationFrame(drawLogoHaze);
-      return;
+  function drawHazeCanvas(canvas, timestamp) {
+    if (canvas.width !== hazeWidth || canvas.height !== hazeHeight) {
+      canvas.width = hazeWidth;
+      canvas.height = hazeHeight;
     }
 
-    if (logoHazeCanvas.width !== hazeWidth || logoHazeCanvas.height !== hazeHeight) {
-      logoHazeCanvas.width = hazeWidth;
-      logoHazeCanvas.height = hazeHeight;
-    }
-
-    const context = logoHazeCanvas.getContext("2d");
+    const context = canvas.getContext("2d");
     const imageData = context.createImageData(hazeWidth, hazeHeight);
     const time = timestamp * 0.001;
     const driftX = Math.sin(time * 0.46) * 9 + Math.sin(time * 0.17 + 1.8) * 6;
@@ -139,6 +181,17 @@
     }
 
     context.putImageData(imageData, 0, 0);
+  }
+
+  function drawLogoHaze(timestamp) {
+    if (logoHazeCanvas) {
+      drawHazeCanvas(logoHazeCanvas, timestamp);
+    }
+
+    if (shopHazeCanvas) {
+      drawHazeCanvas(shopHazeCanvas, timestamp);
+    }
+
     logoAnimationFrame = window.requestAnimationFrame(drawLogoHaze);
   }
 
@@ -225,11 +278,32 @@
       .filter((star) => star.frame <= 7);
   }
 
+  function flipLicense() {
+    const nextLicenseFlipped = !licenseFlipped;
+
+    if (nextLicenseFlipped && !licenseNyanUnlocked) {
+      licenseBackflipCount += 1;
+      licenseNyanUnlocked = licenseBackflipCount >= nyanUnlockBackflipCount;
+    }
+
+    licenseFlipped = nextLicenseFlipped;
+  }
+
+  function handleLicenseKeydown(event) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      flipLicense();
+    }
+  }
+
   onMount(() => {
     updateStarLimit();
     updatePageFromHash();
 
     const animationInterval = window.setInterval(animateStars, 235);
+    const nyanRainbowInterval = window.setInterval(() => {
+      nyanRainbowOffset = (nyanRainbowOffset + 1) % 100000;
+    }, nyanRainbowFrameDelay);
     scheduleStarSpawn();
     logoAnimationFrame = window.requestAnimationFrame(drawLogoHaze);
 
@@ -238,6 +312,7 @@
 
     return () => {
       window.clearInterval(animationInterval);
+      window.clearInterval(nyanRainbowInterval);
       window.clearTimeout(spawnTimeout);
       window.cancelAnimationFrame(logoAnimationFrame);
       window.removeEventListener("resize", updateStarLimit);
@@ -284,20 +359,70 @@
         {/each}
       </div>
     </section>
+  {:else if currentPage === "shop"}
+    <section class="shop-page" aria-label="SHOP">
+      <canvas bind:this={shopHazeCanvas} class="shop-haze" aria-hidden="true"></canvas>
+      <div class="shop-coming-soon" aria-label="Coming soon">
+        <img class="shop-sad-face" src="/media/sad.png?v=20260517-2208" alt="" aria-hidden="true" />
+        <span class="shop-soon-text">COMING SOON</span>
+      </div>
+    </section>
+  {:else if currentPage === "links"}
+    <section class="links-page" aria-label="LINKS">
+      <div class="links-grid">
+        {#each links as link}
+          <a class="link-card" href={link.url} target="_blank" rel="noreferrer">
+            <img src={link.image} alt="" />
+            <span>{link.title}</span>
+          </a>
+        {/each}
+        <div class="links-friends-label">MY FRIENDS</div>
+        <div class="links-banners" aria-label="Banners">
+          {#each linkBanners as banner}
+            <a class="link-banner" href={banner.url} target="_blank" rel="noreferrer" aria-label={banner.title}>
+              <img src={banner.image} alt="" />
+            </a>
+          {/each}
+        </div>
+      </div>
+    </section>
   {:else}
     <section class="card">
       <div class="logo-wrap">
         <canvas bind:this={logoHazeCanvas} class="logo-haze" aria-hidden="true"></canvas>
         <img class="mp" src="/media/magical-poof-logo.png" alt="Magical PooF" />
       </div>
-      <div class="bio-copy" aria-label="Bio">
-        <p>Engineer, programmer,</p>
-        <p>digital gadget enjoyer,</p>
-        <p>and certified kitty appreciator.</p>
-      </div>
-      <img class="license-preview" src="/media/hawaii-license-card.png" alt="Pixel Hawaii driver license card" />
-      <div class="line"></div>
-      <div class="line"></div>
+      <button
+        class:flipped={licenseFlipped}
+        class:nyan-unlocked={licenseNyanUnlocked}
+        class="license-scene"
+        type="button"
+        aria-label="Flip Hawaii driver license card"
+        aria-pressed={licenseFlipped}
+        on:click={flipLicense}
+        on:keydown={handleLicenseKeydown}
+      >
+          <span class="license-card">
+            <img class="license-face license-front" src="/media/hawaii-license-card.png" alt="Pixel Hawaii driver license card" />
+            <img class="license-face license-back" src="/media/hawaii-license-card-back.png?v=20260517-2142" alt="" aria-hidden="true" />
+          {#if licenseNyanUnlocked}
+            <span class="license-back-nyan" aria-hidden="true">
+              <span class="license-rainbow-viewport">
+                <span class="rainbows">
+                  {#each nyanRainbowFrames as rainbow (rainbow.id)}
+                    <span class={`rainbow ${rainbow.frame}`} data-rainbow-id={rainbow.id}>
+                      {#each nyanWaves as wave}
+                        <span class={`wave wave-${wave}`}></span>
+                      {/each}
+                    </span>
+                  {/each}
+                </span>
+              </span>
+              <img class="license-back-gif" src="https://www.nyan.cat/cats/original.gif" alt="" />
+            </span>
+          {/if}
+        </span>
+      </button>
     </section>
   {/if}
 </main>
