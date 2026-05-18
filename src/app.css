@@ -6,7 +6,7 @@ body,
 
 @font-face {
   font-family: "uvKits";
-  src: url("https://cdn.magicalpoof.ru/uvKits.ttf") format("truetype");
+  src: url("/fonts/uvKits.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -171,9 +171,28 @@ select {
   perspective: 1600px;
 }
 
+.card-bio {
+  width: var(--main-card-width);
+  max-width: calc(100vw - 32px);
+  margin: -8px 0 0;
+  color: white;
+  font-family: "uvKits", monospace;
+  font-size: clamp(24px, 1.875rem, 30px);
+  line-height: 1.08;
+  text-align: center;
+  text-shadow:
+    -2px -2px 0 black,
+    0 -2px 0 black,
+    2px -2px 0 black,
+    -2px 0 0 black,
+    2px 0 0 black,
+    -2px 2px 0 black,
+    0 2px 0 black,
+    2px 2px 0 black;
+}
+
 .license-scene:focus-visible {
-  outline: 3px solid yellow;
-  outline-offset: 8px;
+  outline: none;
 }
 
 .license-card {
@@ -828,7 +847,7 @@ select {
 
 @media (max-width: 640px) {
   .page {
-    --main-card-width: min(300px, calc(100vw - 32px));
+    --main-card-width: calc(100vw - 32px);
   }
 
   .site-header {
@@ -887,6 +906,13 @@ select {
   }
 
   .license-scene {
-    width: var(--main-card-width);
+    width: calc(100vw - 32px);
+    max-width: none;
+  }
+
+  .card-bio {
+    width: calc(100vw - 32px);
+    max-width: none;
+    font-size: clamp(22px, 1.75rem, 28px);
   }
 }

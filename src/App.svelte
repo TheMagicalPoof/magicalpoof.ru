@@ -448,6 +448,7 @@
           {/if}
         </span>
       </button>
+      <p class="card-bio">Engineer, programmer, digital gadget enjoyer, and certified kitty appreciator.</p>
     </section>
   {/if}
 </main>
