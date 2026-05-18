@@ -1,7 +1,7 @@
 html,
 body,
 #app {
-  height: 100%;
+  min-height: 100%;
 }
 
 @font-face {
@@ -14,8 +14,13 @@ body,
 
 body {
   margin: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   background: black;
+}
+
+.page {
+  --main-card-width: clamp(300px, 36vw, 560px);
 }
 
 button,
@@ -27,7 +32,7 @@ select {
 
 .page {
   position: relative;
-  min-height: 100%;
+  min-height: 100dvh;
   background: black;
 }
 
@@ -36,7 +41,7 @@ select {
   top: clamp(12px, 2.6vh, 22px);
   left: 50%;
   z-index: 2;
-  width: min(60vh, 66vw);
+  width: min(462px, calc(100vw - 24px));
   transform: translateX(-50%);
 }
 
@@ -55,7 +60,7 @@ select {
   display: inline-block;
   color: white;
   font-family: "uvKits", monospace;
-  font-size: clamp(26px, 4.8vh, 34px);
+  font-size: clamp(26px, 2rem, 34px);
   line-height: 1;
   text-decoration: none;
   text-shadow:
@@ -97,7 +102,7 @@ select {
 }
 
 .bg {
-  position: absolute;
+  position: fixed;
   z-index: 0;
   width: 100%;
   height: 100%;
@@ -108,8 +113,9 @@ select {
 .card {
   position: relative;
   z-index: 1;
-  min-height: 100vh;
-  padding: 0;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  padding: clamp(38px, 10vh, 76px) 16px;
   margin: 0;
   display: flex;
   flex-direction: column;
@@ -119,9 +125,10 @@ select {
 
 .logo-wrap {
   position: relative;
-  width: min(64vh, 72vw);
+  width: var(--main-card-width);
   margin-bottom: 3vh;
   isolation: isolate;
+  transform: translateY(-14px);
   user-select: none;
   -webkit-user-select: none;
 }
@@ -152,10 +159,12 @@ select {
 
 .license-scene {
   display: block;
-  width: min(64vh, 72vw);
+  width: var(--main-card-width);
   padding: 0;
   border: 0;
+  margin-right: auto;
   margin-bottom: 30px;
+  margin-left: auto;
   appearance: none;
   background: transparent;
   cursor: pointer;
@@ -171,6 +180,8 @@ select {
   position: relative;
   display: block;
   width: 100%;
+  margin-right: auto;
+  margin-left: auto;
   aspect-ratio: 1624 / 968;
   user-select: none;
   -webkit-user-select: none;
@@ -388,7 +399,7 @@ select {
 .projects-page {
   position: relative;
   z-index: 1;
-  min-height: 100vh;
+  min-height: 100dvh;
   box-sizing: border-box;
   padding: clamp(98px, 15vh, 132px) 18px 36px;
   display: flex;
@@ -407,17 +418,17 @@ select {
 .project-card {
   position: relative;
   display: grid;
-  grid-template-columns: clamp(54px, 8vw, 78px) auto;
+  grid-template-columns: clamp(54px, 4.875rem, 78px) auto;
   align-items: center;
   justify-content: start;
-  gap: clamp(18px, 3.5vw, 28px);
-  min-height: clamp(76px, 10vw, 104px);
+  gap: clamp(18px, 1.75rem, 28px);
+  min-height: clamp(76px, 6.5rem, 104px);
   box-sizing: border-box;
   border: 3px solid white;
-  padding: 8px clamp(16px, 3vw, 24px);
+  padding: 8px clamp(16px, 1.5rem, 24px);
   color: white;
   font-family: "uvKits", monospace;
-  font-size: clamp(31px, 4.4vw, 48px);
+  font-size: clamp(31px, 3rem, 48px);
   line-height: 1;
   text-decoration: none;
   text-shadow:
@@ -442,7 +453,7 @@ select {
 
 .project-card img {
   flex: 0 0 auto;
-  width: clamp(54px, 8vw, 78px);
+  width: clamp(54px, 4.875rem, 78px);
   aspect-ratio: 1;
   object-fit: contain;
   image-rendering: pixelated;
@@ -466,7 +477,7 @@ select {
 .shop-page {
   position: relative;
   z-index: 1;
-  min-height: 100vh;
+  min-height: 100dvh;
   box-sizing: border-box;
   padding: clamp(98px, 15vh, 132px) 18px 36px;
   display: flex;
@@ -515,7 +526,7 @@ select {
 
 .shop-sad-face {
   display: block;
-  width: clamp(118px, 16vw, 176px);
+  width: clamp(118px, 11rem, 176px);
   height: auto;
   image-rendering: pixelated;
   pointer-events: none;
@@ -523,14 +534,14 @@ select {
 }
 
 .shop-soon-text {
-  margin-top: clamp(20px, 3.2vw, 34px);
-  font-size: clamp(34px, 7vw, 76px);
+  margin-top: clamp(20px, 2.125rem, 34px);
+  font-size: clamp(34px, 4.75rem, 76px);
 }
 
 .links-page {
   position: relative;
   z-index: 1;
-  min-height: 100vh;
+  min-height: 100dvh;
   box-sizing: border-box;
   padding: clamp(98px, 15vh, 132px) 18px 36px;
   display: flex;
@@ -548,17 +559,17 @@ select {
 .link-card {
   position: relative;
   display: grid;
-  grid-template-columns: clamp(54px, 8vw, 78px) auto;
+  grid-template-columns: clamp(54px, 4.875rem, 78px) auto;
   align-items: center;
   justify-content: start;
-  gap: clamp(18px, 3.5vw, 28px);
-  min-height: clamp(76px, 10vw, 104px);
+  gap: clamp(18px, 1.75rem, 28px);
+  min-height: clamp(76px, 6.5rem, 104px);
   box-sizing: border-box;
   border: 3px solid white;
-  padding: 8px clamp(16px, 3vw, 24px);
+  padding: 8px clamp(16px, 1.5rem, 24px);
   color: white;
   font-family: "uvKits", monospace;
-  font-size: clamp(31px, 4.4vw, 48px);
+  font-size: clamp(31px, 3rem, 48px);
   line-height: 1;
   text-decoration: none;
   text-shadow:
@@ -583,7 +594,7 @@ select {
 
 .link-card img {
   flex: 0 0 auto;
-  width: clamp(54px, 8vw, 78px);
+  width: clamp(54px, 4.875rem, 78px);
   aspect-ratio: 1;
   object-fit: contain;
   image-rendering: pixelated;
@@ -605,10 +616,10 @@ select {
 }
 
 .links-friends-label {
-  margin: clamp(4px, 1vw, 10px) 0 clamp(-4px, -0.5vw, 0px);
+  margin: clamp(4px, 0.625rem, 10px) 0 clamp(-4px, -0.25rem, 0px);
   color: yellow;
   font-family: "uvKits", monospace;
-  font-size: clamp(24px, 4vw, 38px);
+  font-size: clamp(24px, 2.375rem, 38px);
   line-height: 1;
   text-align: center;
   text-shadow:
@@ -626,17 +637,17 @@ select {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: center;
-  column-gap: clamp(26px, 5vw, 42px);
+  column-gap: clamp(26px, 2.625rem, 42px);
   row-gap: 0;
   width: 100%;
-  margin-top: clamp(0px, 0.8vw, 6px);
+  margin-top: clamp(0px, 0.375rem, 6px);
 }
 
 .link-banner {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: clamp(74px, 9.5vw, 96px);
+  min-height: clamp(74px, 6rem, 96px);
   box-sizing: border-box;
   border: 3px solid white;
   padding: 12px 14px;
@@ -654,7 +665,7 @@ select {
 
 .link-banner img {
   display: block;
-  height: clamp(44px, 6.2vw, 58px);
+  height: clamp(44px, 3.625rem, 58px);
   width: auto;
   image-rendering: pixelated;
   pointer-events: none;
@@ -806,9 +817,13 @@ select {
 }
 
 @media (max-width: 640px) {
+  .page {
+    --main-card-width: min(300px, calc(100vw - 32px));
+  }
+
   .site-header {
     top: 12px;
-    width: min(66vw, 280px);
+    width: min(350px, calc(100vw - 24px));
   }
 
   .site-nav {
@@ -818,7 +833,7 @@ select {
   }
 
   .site-nav a {
-    font-size: clamp(18px, 5.8vw, 22px);
+    font-size: clamp(18px, 1.375rem, 22px);
   }
 
   .projects-page {
@@ -838,30 +853,30 @@ select {
   }
 
   .project-card {
-    grid-template-columns: clamp(46px, 14vw, 60px) auto;
+    grid-template-columns: clamp(46px, 3.75rem, 60px) auto;
     gap: 12px;
     min-height: 64px;
     padding: 6px 10px;
-    font-size: clamp(24px, 7vw, 31px);
+    font-size: clamp(24px, 1.9375rem, 31px);
   }
 
   .link-card {
-    grid-template-columns: clamp(46px, 14vw, 60px) auto;
+    grid-template-columns: clamp(46px, 3.75rem, 60px) auto;
     gap: 12px;
     min-height: 64px;
     padding: 6px 10px;
-    font-size: clamp(24px, 7vw, 31px);
+    font-size: clamp(24px, 1.9375rem, 31px);
   }
 
   .project-card img {
-    width: clamp(46px, 14vw, 60px);
+    width: clamp(46px, 3.75rem, 60px);
   }
 
   .link-card img {
-    width: clamp(46px, 14vw, 60px);
+    width: clamp(46px, 3.75rem, 60px);
   }
 
   .license-scene {
-    width: min(72vw, 300px);
+    width: var(--main-card-width);
   }
 }
