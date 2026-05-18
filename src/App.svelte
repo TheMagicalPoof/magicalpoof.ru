@@ -10,22 +10,27 @@
   const nyanUnlockBackflipCount = 10;
   const nyanRainbowFrameCount = 12;
   const nyanRainbowFrameDelay = 150;
+  const licenseFrontImage = "https://cdn.magicalpoof.ru/hawai%20ld.png";
+  const licenseBackImage = "https://cdn.magicalpoof.ru/hawai%20ld%20backflip.png";
+  const logoImage = "https://cdn.magicalpoof.ru/magicalpoof.png";
+  const sadImage = "https://cdn.magicalpoof.ru/sad.png";
+  const nyanCatImage = "https://cdn.magicalpoof.ru/nyan-cat-original.gif";
   const nyanWaves = Array.from({ length: 7 }, (_, index) => index + 1);
   const projects = [
     {
       title: "CAPS TABLE",
       url: "https://caps.magicalpoof.ru/",
-      image: "/projects/caps-table-icon.png"
+      image: "https://cdn.magicalpoof.ru/caps-table-icon.png"
     },
     {
       title: "GLYPH",
       url: "https://glyph.magicalpoof.ru/",
-      image: "/projects/glyph-icon.png"
+      image: "https://cdn.magicalpoof.ru/glyph-icon.png"
     },
     {
       title: "CUTE PLANT",
       url: "https://t.me/cute_plant_bot",
-      image: "/projects/cute-plant-icon.png"
+      image: "https://cdn.magicalpoof.ru/cute-plant-icon.png"
     }
   ];
   const links = [
@@ -49,12 +54,12 @@
     {
       title: "VARD",
       url: "https://vard.cc/",
-      image: "/media/btn_vard_on.webp"
+      image: "https://cdn.magicalpoof.ru/btn_vard_on.webp"
     },
     {
       title: "SIM.RED",
       url: "https://sim.red/",
-      image: "/media/redsim.webp"
+      image: "https://cdn.magicalpoof.ru/redsim.webp"
     }
   ];
 
@@ -300,6 +305,9 @@
     updateStarLimit();
     updatePageFromHash();
 
+    const nyanCatPreload = new Image();
+    nyanCatPreload.src = nyanCatImage;
+
     const animationInterval = window.setInterval(animateStars, 235);
     const nyanRainbowInterval = window.setInterval(() => {
       nyanRainbowOffset = (nyanRainbowOffset + 1) % 100000;
@@ -323,6 +331,11 @@
 
 <svelte:head>
   <meta name="description" content="Magical PooF personal site" />
+  <link
+    rel="preload"
+    as="image"
+    href={licenseFrontImage}
+  />
 </svelte:head>
 
 <main class="page" aria-label="Magical PooF">
@@ -363,7 +376,7 @@
     <section class="shop-page" aria-label="SHOP">
       <canvas bind:this={shopHazeCanvas} class="shop-haze" aria-hidden="true"></canvas>
       <div class="shop-coming-soon" aria-label="Coming soon">
-        <img class="shop-sad-face" src="/media/sad.png?v=20260517-2208" alt="" aria-hidden="true" />
+        <img class="shop-sad-face" src={sadImage} alt="" aria-hidden="true" />
         <span class="shop-soon-text">COMING SOON</span>
       </div>
     </section>
@@ -390,7 +403,7 @@
     <section class="card">
       <div class="logo-wrap">
         <canvas bind:this={logoHazeCanvas} class="logo-haze" aria-hidden="true"></canvas>
-        <img class="mp" src="/media/magical-poof-logo.png" alt="Magical PooF" />
+        <img class="mp" src={logoImage} alt="Magical PooF" />
       </div>
       <button
         class:flipped={licenseFlipped}
@@ -403,8 +416,20 @@
         on:keydown={handleLicenseKeydown}
       >
           <span class="license-card">
-            <img class="license-face license-front" src="/media/hawaii-license-card.png" alt="Pixel Hawaii driver license card" />
-            <img class="license-face license-back" src="/media/hawaii-license-card-back.png?v=20260517-2142" alt="" aria-hidden="true" />
+            <img
+              class="license-face license-front"
+              src={licenseFrontImage}
+              alt="Pixel Hawaii driver license card"
+              loading="eager"
+              fetchpriority="high"
+            />
+            <img
+              class="license-face license-back"
+              src={licenseBackImage}
+              alt=""
+              aria-hidden="true"
+              loading="eager"
+            />
           {#if licenseNyanUnlocked}
             <span class="license-back-nyan" aria-hidden="true">
               <span class="license-rainbow-viewport">
@@ -418,7 +443,7 @@
                   {/each}
                 </span>
               </span>
-              <img class="license-back-gif" src="https://www.nyan.cat/cats/original.gif" alt="" />
+              <img class="license-back-gif" src={nyanCatImage} alt="" />
             </span>
           {/if}
         </span>
