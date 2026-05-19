@@ -31,6 +31,11 @@
       title: "CUTE PLANT",
       url: "https://t.me/cute_plant_bot",
       image: "https://cdn.magicalpoof.ru/cute-plant-icon.png"
+    },
+    {
+      title: "3D VIEWER",
+      url: "https://3dviewer.by/",
+      image: "https://cdn.magicalpoof.ru/3dviewer.png"
     }
   ];
   const links = [
