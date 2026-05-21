@@ -53,6 +53,11 @@
       title: "YOUTUBE",
       url: "https://www.youtube.com/@magical_poof",
       image: "/media/youtube_icon.png"
+    },
+    {
+      title: "GITHUB",
+      url: "https://github.com/TheMagicalPoof",
+      image: "https://cdn.magicalpoof.ru/github_icon.png"
     }
   ];
   const linkBanners = [
